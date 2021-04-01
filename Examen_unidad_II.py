@@ -21,10 +21,11 @@ from snappy import GPF
 import shapefile
 import pygeoif
 
+from Examen_unidad_II_gui import abrir_imagen, abrir_shape
 
 ################################################## LEER LOS DATOS DE LA IMAGEN ###############################################
 #Cargar imagenes
-path_to_sentinel_data = "C:/CTE_334/resul9/S1B_IW_GRDH_1SDV_20201119T235742_20201119T235807_024341_02E47D_DCF6.zip"
+path_to_sentinel_data = abrir_imagen()
 product = ProductIO.readProduct(path_to_sentinel_data)
 
 #Leer y mostrar la informaciónd de la imagen
@@ -65,7 +66,7 @@ apply_orbit_file = GPF.createProduct('Apply-Orbit-File', parameters, product)
 
 
 ############################### Recortar la imagen
-r = shapefile.Reader("C:/CTE_334/Actividad_09/shape/villanueva.shp")
+r = shapefile.Reader(abrir_shape())
 g=[]
 for s in r.shapes():
     g.append(pygeoif.geometry.as_shape(s))
@@ -94,7 +95,7 @@ band_names = product_subset.getBandNames()
 print("Band names: {}".format(", ".join(band_names)))
 band = product_subset.getBand(band_names[0])
 print(band.getRasterSize())
-plotBand(product_subset, "Intensity_VV", 0, 100000)
+#plotBand(product_subset, "Intensity_VV", 0, 100000)
 
 
 ############################ Aplicar la calibracion de la imagen
@@ -104,7 +105,7 @@ parameters.put('sourceBands', 'Intensity_VV')
 parameters.put('selectedPolarisations', "VV")
 parameters.put('outputImageScaleInDb', False)
 product_calibrated = GPF.createProduct("Calibration", parameters, product_subset)
-plotBand(product_calibrated, "Sigma0_VV", 0, 1)
+#plotBand(product_calibrated, "Sigma0_VV", 0, 1)
 
 
 ########################### Aplicar el filtro Speckle
@@ -123,7 +124,7 @@ parameters.put('targetWindowSizeStr', '3x3')
 parameters.put('sigmaStr', '0.9')
 parameters.put('anSize', '50')
 speckle_filter = snappy.GPF.createProduct('Speckle-Filter', parameters, product_calibrated)
-plotBand(speckle_filter, 'Sigma0_VV', 0, 1)
+#plotBand(speckle_filter, 'Sigma0_VV', 0, 1)
 
 
 ############################ Aplicar la correccion del terremo
@@ -150,8 +151,8 @@ plotBand(flood_mask, 'Sigma0_VV_Flooded', 0, 1)
 
 
 ############################ Crear la imagen a partir de la mascara
-ProductIO.writeProduct(flood_mask, "data/final_mask", 'GeoTIFF')
-os.path.exists("data/final_mask.tif")
+ProductIO.writeProduct(flood_mask, "C:/CTE_334/resul9/ETA", 'GeoTIFF')
+os.path.exists("C:/CTE_334/resul9/ETA.tif")
 
 
 

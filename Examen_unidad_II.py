@@ -21,11 +21,11 @@ from snappy import GPF
 import shapefile
 import pygeoif
 
-from Examen_unidad_II_gui import abrir_imagen, abrir_shape
+
 
 ################################################## LEER LOS DATOS DE LA IMAGEN ###############################################
 #Cargar imagenes
-path_to_sentinel_data = abrir_imagen()
+path_to_sentinel_data = "C:/CTE_334/resul9/S1B_IW_GRDH_1SDV_20201119T235742_20201119T235807_024341_02E47D_DCF6.zip"
 product = ProductIO.readProduct(path_to_sentinel_data)
 
 #Leer y mostrar la informaciónd de la imagen
@@ -56,6 +56,7 @@ def plotBand(product, band, vmin, vmax):
 
 ###################################################### PRE-PROCESAMIENTO ###################################################
 
+
 ############################## Aplicar correccion orbital
 parameters = HashMap()
 GPF.getDefaultInstance().getOperatorSpiRegistry().loadOperatorSpis()
@@ -66,7 +67,7 @@ apply_orbit_file = GPF.createProduct('Apply-Orbit-File', parameters, product)
 
 
 ############################### Recortar la imagen
-r = shapefile.Reader(abrir_shape())
+r = shapefile.Reader("C:/CTE_334/Actividad_09/shape/San_Manuel_JC.shp")
 g=[]
 for s in r.shapes():
     g.append(pygeoif.geometry.as_shape(s))
@@ -153,6 +154,7 @@ plotBand(flood_mask, 'Sigma0_VV_Flooded', 0, 1)
 ############################ Crear la imagen a partir de la mascara
 ProductIO.writeProduct(flood_mask, "C:/CTE_334/resul9/ETA", 'GeoTIFF')
 os.path.exists("C:/CTE_334/resul9/ETA.tif")
+
 
 
 

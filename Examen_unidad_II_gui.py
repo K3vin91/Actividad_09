@@ -32,9 +32,7 @@ textResult1.grid(row = 2, column = 1, padx = (50,50))
 
 #funcion para abrir imagen
 def abrir_imagen():
-    imagen_abierta=filedialog.askopenfilename(initialdir = "/",
-                title = "Seleccione la imagen",filetypes = (("zip files","*.zip"),
-                ("all files","*.*")))
+    imagen_abierta=filedialog.askopenfilename(initialdir = "/", title = "Seleccione la imagen",filetypes = (("zip files","*.zip"),("all files","*.*")))
     print (imagen_abierta)
     textResult1.insert(tk.END, imagen_abierta)
 
@@ -112,8 +110,7 @@ boton5.grid(row = 13, column = 1)
 
 vent.mainloop()
 
-    #message = 'Proceso finalizado con exito'
-    #showinfo('¡Finish!', message)
+    
 
 
 

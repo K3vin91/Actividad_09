@@ -24,7 +24,7 @@ import pygeoif
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
-
+from tkinter import ttk
 from tkinter.messagebox import showinfo
 
 
@@ -130,6 +130,7 @@ etiq3 = tk.Label(vent, text='3. Proceda a pre-procesar la imagen', font = 'Helve
 etiq3.grid(row = 6, column = 1)
 
 def pre_proc():
+    
     ############################## Aplicar correccion orbital
     global HashMap
     parameters = HashMap()
@@ -198,10 +199,9 @@ def pre_proc():
     speckle_filter_tc = GPF.createProduct("Terrain-Correction", parameters, speckle_filter)
     plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
     
-    message = 'Proceso finalizado con exito'
+    message = 'Preproceso finalizado con exito'
     showinfo('¡Finish!', message)
     
-
 #Agregar boton 3
 boton3 = tk.Button(text="Preprocesar la imagen", font = 'Helvetica 10', bg="white", command = pre_proc)
 boton3.grid(row = 7, column = 1)
@@ -210,21 +210,23 @@ boton3.grid(row = 7, column = 1)
 
 #Agregar etiqueta 4
 etiq4 = tk.Label(vent, text='4. Defina el umbral de la mascara de agua', font = 'Helvetica 10', bg='silver',  fg='black')
-etiq4.grid(row = 9, column = 1)
+etiq4.grid(row = 10, column = 1)
 
 #Agregar caja de texto
 global umbral
 umbral = tk.Entry(vent, font= 'Helvetica 10', justify = 'center', highlightthickness = 3)
-umbral.grid(row = 10, column = 1, pady = (3))
+umbral.grid(row = 11, column = 1, pady = (3))
+
 
 def masc():
+    texto = '(Sigma0_VV < '+ umbral.get() +') ? 1 : 0'
     ############################ Crear una mascara binaria para la inundacion
     parameters = HashMap()
     BandDescriptor = snappy.jpy.get_type('org.esa.snap.core.gpf.common.BandMathsOp$BandDescriptor')
     targetBand = BandDescriptor()
     targetBand.name = 'Sigma0_VV_Flooded'
     targetBand.type = 'uint8'
-    targetBand.expression = '(Sigma0_VV < '+ umbral +') ? 1 : 0'
+    targetBand.expression = texto
     targetBands = snappy.jpy.array('org.esa.snap.core.gpf.common.BandMathsOp$BandDescriptor', 1)
     targetBands[0] = targetBand
     parameters.put('targetBands', targetBands)
@@ -234,20 +236,20 @@ def masc():
 
 #Agregar boton 4
 boton4 = tk.Button(text="Aplicar la mascara", font = 'Helvetica 10', bg="white", command = masc)
-boton4.grid(row = 11, column = 1, pady =(3))
+boton4.grid(row = 12, column = 1, pady =(3))
 
 
 ################################################## Widget 5 #####################################################
 
 #Agregar etiqueta 5
 etiq5 = tk.Label(vent, text='5. Crea la imagen GeoTIFF a partir del umbral seleccionado', font = 'Helvetica 10', bg='silver',  fg='black')
-etiq5.grid(row = 12, column = 1)
+etiq5.grid(row = 13, column = 1)
 
 mapa = tk.Canvas(vent, width = 500, height = 600, bg = 'white', highlightthickness = 10)
-mapa.grid(row = 0, column = 2, rowspan = 14, pady =(30))
+mapa.grid(row = 0, column = 2, rowspan = 16, pady =(30))
 
 boton5 = tk.Button(text="Crear el archivo", font = 'Helvetica 10', bg="white")
-boton5.grid(row = 13, column = 1)
+boton5.grid(row = 14, column = 1)
 
 
 

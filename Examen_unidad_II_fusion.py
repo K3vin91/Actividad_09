@@ -49,6 +49,7 @@ textResult1.grid(row = 2, column = 1, padx = (50,50))
 
 #funcion para abrir imagen
 def abrir_imagen():
+    global imagen_abierta
     imagen_abierta=filedialog.askopenfilename(initialdir = "/", title = "Seleccione la imagen",filetypes = (("zip files","*.zip"),("all files","*.*")))
     #print (imagen_abierta)
     textResult1.insert(tk.END, imagen_abierta)
@@ -230,9 +231,10 @@ def masc():
     targetBands = snappy.jpy.array('org.esa.snap.core.gpf.common.BandMathsOp$BandDescriptor', 1)
     targetBands[0] = targetBand
     parameters.put('targetBands', targetBands)
+    global flood_mask
     flood_mask = GPF.createProduct('BandMaths', parameters, speckle_filter_tc)
     plotBand(flood_mask, 'Sigma0_VV_Flooded', 0, 1)
-    return flood_mask
+    
 
 #Agregar boton 4
 boton4 = tk.Button(text="Aplicar la mascara", font = 'Helvetica 10', bg="white", command = masc)
@@ -245,13 +247,15 @@ boton4.grid(row = 12, column = 1, pady =(3))
 etiq5 = tk.Label(vent, text='5. Crea la imagen GeoTIFF a partir del umbral seleccionado', font = 'Helvetica 10', bg='silver',  fg='black')
 etiq5.grid(row = 13, column = 1)
 
-mapa = tk.Canvas(vent, width = 500, height = 600, bg = 'white', highlightthickness = 10)
-mapa.grid(row = 0, column = 2, rowspan = 16, pady =(30))
+def guardar():
+    ProductIO.writeProduct(flood_mask, imagen_abierta, 'GeoTIFF')
+    #os.path.exists("C:/CTE_334/resul9/ETA.tif")
 
-boton5 = tk.Button(text="Crear el archivo", font = 'Helvetica 10', bg="white")
+boton5 = tk.Button(text="Crear el archivo", font = 'Helvetica 10', bg="white", command = guardar)
 boton5.grid(row = 14, column = 1)
 
-
+mapa = tk.Canvas(vent, width = 500, height = 600, bg = 'white', highlightthickness = 10)
+mapa.grid(row = 0, column = 2, rowspan = 16, pady =(30))
 
 vent.mainloop()
 

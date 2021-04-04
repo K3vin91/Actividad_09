@@ -20,7 +20,7 @@ from snappy import GPF
 # Para leer shapefiles
 import shapefile
 import pygeoif
-
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
@@ -199,10 +199,11 @@ def pre_proc():
     global speckle_filter_tc
     speckle_filter_tc = GPF.createProduct("Terrain-Correction", parameters, speckle_filter)
     plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
-    
+           
     message = 'Preproceso finalizado con exito'
     showinfo('¡Finish!', message)
-    
+ 
+       
 #Agregar boton 3
 boton3 = tk.Button(text="Preprocesar la imagen", font = 'Helvetica 10', bg="white", command = pre_proc)
 boton3.grid(row = 7, column = 1)
@@ -250,6 +251,9 @@ etiq5.grid(row = 13, column = 1)
 def guardar():
     ProductIO.writeProduct(flood_mask, imagen_abierta, 'GeoTIFF')
     #os.path.exists("C:/CTE_334/resul9/ETA.tif")
+    
+    message = 'Imagen guardada con exito'
+    showinfo('¡Guardado!', message)
 
 boton5 = tk.Button(text="Crear el archivo", font = 'Helvetica 10', bg="white", command = guardar)
 boton5.grid(row = 14, column = 1)

@@ -85,11 +85,13 @@ def plotBand(product, band, vmin, vmax):
     band_data = np.zeros(w * h, np.float32)
     band.readPixels(0, 0, w, h, band_data)
     band_data.shape = h, w
-    width = 12
-    height = 12
-    plt.figure(figsize=(width, height))
+    width = 7
+    height = 8
+    figure= plt.figure(figsize=(width, height))
     imgplot = plt.imshow(band_data, cmap=plt.cm.binary, vmin=vmin, vmax=vmax)
-    
+               
+    canvas = FigureCanvasTkAgg(figure, vent)
+    canvas.get_tk_widget().grid(row=0, column=2, rowspan = 14, padx=(30), pady =(30))
 
 
 ###################################################### PRE-PROCESAMIENTO ###################################################
@@ -199,19 +201,13 @@ def pre_proc():
     parameters.put('sourceBands', 'Sigma0_VV')
     global speckle_filter_tc
     speckle_filter_tc = GPF.createProduct("Terrain-Correction", parameters, speckle_filter)
-    imagen = plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
+    plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
     
     message = 'Preproceso finalizado con exito'
     showinfo('¡Finish!', message)
      
     
-    figure = Figure(figsize=(5, 4), dpi=100)
-    plot = figure.add_subplot(1, 1, 1)
     
-    plot.plot(imagen)
-    
-    canvas = FigureCanvasTkAgg(figure, vent)
-    canvas.get_tk_widget().grid(row=0, column=2, rowspan = 16, pady =(30))
        
        
 #Agregar boton 3
@@ -268,8 +264,6 @@ def guardar():
 boton5 = tk.Button(text="Crear el archivo", font = 'Helvetica 10', bg="white", command = guardar)
 boton5.grid(row = 14, column = 1)
 
-mapa = tk.Canvas(vent, width = 500, height = 600, bg = 'white', highlightthickness = 10)
-mapa.grid(row = 0, column = 2, rowspan = 16, pady =(30))
 
 vent.mainloop()
 

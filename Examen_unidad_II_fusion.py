@@ -21,6 +21,7 @@ from snappy import GPF
 import shapefile
 import pygeoif
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
@@ -198,11 +199,20 @@ def pre_proc():
     parameters.put('sourceBands', 'Sigma0_VV')
     global speckle_filter_tc
     speckle_filter_tc = GPF.createProduct("Terrain-Correction", parameters, speckle_filter)
-    plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
-           
+    imagen = plotBand(speckle_filter_tc, 'Sigma0_VV', 0, 0.1)
+    
     message = 'Preproceso finalizado con exito'
     showinfo('¡Finish!', message)
- 
+     
+    
+    figure = Figure(figsize=(5, 4), dpi=100)
+    plot = figure.add_subplot(1, 1, 1)
+    
+    plot.plot(imagen)
+    
+    canvas = FigureCanvasTkAgg(figure, vent)
+    canvas.get_tk_widget().grid(row=0, column=2, rowspan = 16, pady =(30))
+       
        
 #Agregar boton 3
 boton3 = tk.Button(text="Preprocesar la imagen", font = 'Helvetica 10', bg="white", command = pre_proc)
